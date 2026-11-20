@@ -38,6 +38,7 @@ async function registerEmail(email, password) {
   alert("確認メールを送信しました。メールを確認してください。");
 }
 signupButton.addEventListener("click", async () => {
+  alert("新規会員登録ボタンが押されました");
   const email = authEmailInput.value.trim();
   const password = authPasswordInput.value;
 
