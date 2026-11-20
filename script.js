@@ -24,7 +24,7 @@ let posts = [];
 let currentUser = null;
 let db = null;
 async function registerEmail(email, password) {
-  const { data, error } = await db.auth.updateUser({
+  const { data, error } = await db.auth.signUp({
     email: email,
     password: password
   });
