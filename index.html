@@ -35,6 +35,7 @@
     .country {
       color: #666;
       font-size: 14px;
+      margin-top: 5px;
     }
     .actions {
       color: #777;
@@ -57,6 +58,20 @@
       color: white;
       cursor: pointer;
     }
+    .delete {
+      background: #eee;
+      color: #555;
+      font-size: 13px;
+      padding: 7px 12px;
+    }
+    .notice {
+      color: #666;
+      font-size: 13px;
+    }
+    .message {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
   </style>
 </head>
 <body>
@@ -68,10 +83,21 @@
   <main>
     <div class="post">
       <h3>つぶやいてみよう</h3>
-      <textarea rows="3"
+
+      <textarea id="message" rows="3"
+        maxlength="280"
         placeholder="今、何を考えていますか？"></textarea>
-      <button type="button">投稿する</button>
+
+      <button id="submit" type="button">
+        投稿する
+      </button>
+
+      <p class="notice">
+        ※お試し機能です。投稿はこのブラウザにのみ保存されます。
+      </p>
     </div>
+
+    <div id="posts"></div>
 
     <div class="post">
       <div class="name">旅する猫</div>
@@ -87,5 +113,92 @@
       <div class="actions">♡ 8　💬 3</div>
     </div>
   </main>
+
+  <script>
+    const messageInput = document.getElementById("message");
+    const postsArea = document.getElementById("posts");
+    const submitButton = document.getElementById("submit");
+    const storageKey = "sototubu-demo-posts";
+
+    let posts = [];
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey));
+      if (Array.isArray(saved)) {
+        posts = saved.filter(item => typeof item === "string");
+      }
+    } catch (error) {
+      posts = [];
+    }
+
+    function savePosts() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(posts));
+        return true;
+      } catch (error) {
+        alert("保存できませんでした。ブラウザの設定をご確認ください。");
+        return false;
+      }
+    }
+
+    function showPosts() {
+      postsArea.replaceChildren();
+
+      posts.forEach((message, index) => {
+        const card = document.createElement("div");
+        card.className = "post";
+
+        const name = document.createElement("div");
+        name.className = "name";
+        name.textContent = "あなた";
+
+        const country = document.createElement("div");
+        country.className = "country";
+        country.textContent = "🌏 お試し投稿";
+
+        const body = document.createElement("p");
+        body.className = "message";
+        body.textContent = message;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete";
+        deleteButton.type = "button";
+        deleteButton.textContent = "削除する";
+
+        deleteButton.addEventListener("click", () => {
+          if (!confirm("この投稿を削除しますか？")) return;
+          const oldPosts = [...posts];
+          posts.splice(index, 1);
+          if (!savePosts()) posts = oldPosts;
+          showPosts();
+        });
+
+        card.append(name, country, body, deleteButton);
+        postsArea.appendChild(card);
+      });
+    }
+
+    submitButton.addEventListener("click", () => {
+      const message = messageInput.value.trim();
+
+      if (!message) {
+        alert("文章を入力してください。");
+        return;
+      }
+
+      const oldPosts = [...posts];
+      posts.unshift(message);
+
+      if (!savePosts()) {
+        posts = oldPosts;
+        return;
+      }
+
+      messageInput.value = "";
+      showPosts();
+    });
+
+    showPosts();
+  </script>
 </body>
 </html>
