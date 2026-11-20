@@ -13,6 +13,12 @@ const messageInput = document.getElementById("message");
 const postsArea = document.getElementById("posts");
 const submitButton = document.getElementById("submit");
 
+const authEmailInput = document.getElementById("authEmail");
+const authPasswordInput = document.getElementById("authPassword");
+const signUpButton = document.getElementById("signUpButton");
+const loginButton = document.getElementById("loginButton");
+const logoutButton = document.getElementById("logoutButton");
+
 let profile = { name: "", country: "", status: "在住" };
 let posts = [];
 let currentUser = null;
