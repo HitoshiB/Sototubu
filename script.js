@@ -46,15 +46,17 @@ signupButton.addEventListener("click", async () => {
     return;
   }
 
-  if (!currentUser) {
-    alert("ユーザー情報を取得できませんでした。");
+ signUpButton.addEventListener("click", async () => {
+  const email = authEmailInput.value.trim();
+  const password = authPasswordInput.value;
+
+  if (!email || !password) {
+    alert("メールアドレスとパスワードを入力してください。");
     return;
   }
 
-  if (!currentUser.is_anonymous) {
-    alert("このアカウントは既に登録されています。");
-    return;
-  }
+  await registerEmail(email, password);
+});
 
   await registerEmail(email, password);
 });
