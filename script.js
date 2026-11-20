@@ -295,5 +295,31 @@ async function initialize() {
     notify("Supabaseへの接続に失敗しました。");
   }
 }
+loginButton.addEventListener("click", async () => {
+  const email = authEmailInput.value.trim();
+  const password = authPasswordInput.value;
 
+  if (!email || !password) {
+    alert("メールアドレスとパスワードを入力してください。");
+    return;
+  }
+
+  if (!db) {
+    alert("Supabaseに接続できていません。");
+    return;
+  }
+
+  const { data, error } = await db.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert("ログイン失敗: " + error.message);
+    return;
+  }
+
+  currentUser = data.user;
+  alert("ログインに成功しました！");
+});
 initialize();
