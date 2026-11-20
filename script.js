@@ -23,7 +23,19 @@ let profile = { name: "", country: "", status: "在住" };
 let posts = [];
 let currentUser = null;
 let db = null;
+async function registerEmail(email, password) {
+  const { data, error } = await db.auth.updateUser({
+    email: email,
+    password: password
+  });
 
+  if (error) {
+    alert("登録に失敗しました: " + error.message);
+    return;
+  }
+
+  alert("確認メールを送信しました。メールを確認してください。");
+}
 function notify(message) {
   alert(message);
 }
