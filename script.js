@@ -36,6 +36,27 @@ async function registerEmail(email, password) {
 
   alert("確認メールを送信しました。メールを確認してください。");
 }
+signupButton.addEventListener("click", async () => {
+  const email = authEmailInput.value.trim();
+  const password = authPasswordInput.value;
+
+  if (!email || !password) {
+    alert("メールアドレスとパスワードを入力してください。");
+    return;
+  }
+
+  if (!currentUser) {
+    alert("ユーザー情報を取得できませんでした。");
+    return;
+  }
+
+  if (!currentUser.is_anonymous) {
+    alert("このアカウントは既に登録されています。");
+    return;
+  }
+
+  await registerEmail(email, password);
+});
 function notify(message) {
   alert(message);
 }
