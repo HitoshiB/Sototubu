@@ -2,203 +2,241 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>そとつぶ | 海外交流SNS</title>
-  <style>
-    body {
-      margin: 0;
-      background: #f5f7fa;
-      color: #222;
-      font-family: sans-serif;
-    }
-    header {
-      background: #2563eb;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    header h1 { margin: 0; }
-    main {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 0 15px;
-    }
-    .post {
-      background: white;
-      padding: 18px;
-      margin-bottom: 15px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-    }
-    .name { font-weight: bold; }
-    .country {
-      color: #666;
-      font-size: 14px;
-      margin-top: 5px;
-    }
-    .actions {
-      color: #777;
-      font-size: 14px;
-    }
-    textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font: inherit;
-    }
-    button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: #2563eb;
-      color: white;
-      cursor: pointer;
-    }
-    .delete {
-      background: #eee;
-      color: #555;
-      font-size: 13px;
-      padding: 7px 12px;
-    }
-    .notice {
-      color: #666;
-      font-size: 13px;
-    }
-    .message {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>そとつぶ | 海外交流SNS</title>
+<style>
+body{margin:0;background:#f5f7fa;color:#222;font-family:system-ui,-apple-system,sans-serif}
+header{background:#2563eb;color:white;padding:22px 16px;text-align:center}
+header h1{margin:0 0 8px}
+header p{margin:0}
+main{max-width:600px;margin:20px auto;padding:0 15px}
+.post{background:white;padding:18px;margin-bottom:15px;border-radius:12px;border:1px solid #ddd}
+.name{font-weight:bold}
+.country,.notice{color:#666;font-size:14px}
+.country{margin-top:5px}
+.actions{color:#777;font-size:14px}
+textarea,input,select{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccc;border-radius:8px;font:inherit;background:white}
+textarea{resize:vertical}
+label{display:block;font-weight:bold;margin:12px 0 6px}
+button{margin-top:12px;padding:10px 20px;border:0;border-radius:8px;background:#2563eb;color:white;cursor:pointer;font:inherit}
+.delete{background:#eee;color:#555;font-size:13px;padding:7px 12px}
+.message{white-space:pre-wrap;overflow-wrap:anywhere}
+</style>
 </head>
 <body>
-  <header>
-    <h1>そとつぶ</h1>
-    <p>海外に興味がある日本人の交流広場</p>
-  </header>
+<header>
+<h1>そとつぶ</h1>
+<p>海外に興味がある日本人の交流広場</p>
+</header>
+<main>
 
-  <main>
-    <div class="post">
-      <h3>つぶやいてみよう</h3>
+<section class="post">
+<h2>プロフィール設定</h2>
+<label for="nickname">ニックネーム</label>
+<input id="nickname" maxlength="30" placeholder="例：旅する猫">
 
-      <textarea id="message" rows="3"
-        maxlength="280"
-        placeholder="今、何を考えていますか？"></textarea>
+<label for="country">国名</label>
+<select id="country">
+<option value="">選択してください</option>
+<option value="🇯🇵 日本">🇯🇵 日本</option>
+<option value="🇬🇧 イギリス">🇬🇧 イギリス</option>
+<option value="🇦🇺 オーストラリア">🇦🇺 オーストラリア</option>
+<option value="🇨🇦 カナダ">🇨🇦 カナダ</option>
+<option value="🇳🇿 ニュージーランド">🇳🇿 ニュージーランド</option>
+<option value="🇺🇸 アメリカ">🇺🇸 アメリカ</option>
+<option value="🇫🇷 フランス">🇫🇷 フランス</option>
+<option value="🇩🇪 ドイツ">🇩🇪 ドイツ</option>
+<option value="🌏 その他・非公開">🌏 その他・非公開</option>
+</select>
 
-      <button id="submit" type="button">
-        投稿する
-      </button>
+<label for="status">現在の状況</label>
+<select id="status">
+<option value="在住">在住</option>
+<option value="渡航希望">渡航希望</option>
+<option value="興味あり">興味あり</option>
+</select>
 
-      <p class="notice">
-        ※お試し機能です。投稿はこのブラウザにのみ保存されます。
-      </p>
-    </div>
+<button id="saveProfile" type="button">プロフィールを保存</button>
+<p class="notice" id="profileNotice">
+プロフィールはこのブラウザにのみ保存されます。
+</p>
+</section>
 
-    <div id="posts"></div>
+<section class="post">
+<h2>つぶやいてみよう</h2>
+<textarea id="message" rows="3" maxlength="280"
+placeholder="今、何を考えていますか？"></textarea>
+<button id="submit" type="button">投稿する</button>
+<p class="notice">
+※お試し機能です。投稿はこのブラウザにのみ保存されます。
+</p>
+</section>
 
-    <div class="post">
-      <div class="name">旅する猫</div>
-      <div class="country">🇬🇧 イギリス・在住</div>
-      <p>ロンドンに来て半年。皆さん休日は何をしていますか？</p>
-      <div class="actions">♡ 12　💬 5</div>
-    </div>
+<div id="posts"></div>
 
-    <div class="post">
-      <div class="name">青い空</div>
-      <div class="country">🇦🇺 オーストラリア・渡航希望</div>
-      <p>来年ワーホリに行きたいです。仕事探しは大変ですか？</p>
-      <div class="actions">♡ 8　💬 3</div>
-    </div>
-  </main>
+<section class="post">
+<div class="name">旅する猫</div>
+<div class="country">🇬🇧 イギリス・在住</div>
+<p>ロンドンに来て半年。皆さん休日は何をしていますか？</p>
+<div class="actions">♡ 12　💬 5</div>
+</section>
 
-  <script>
-    const messageInput = document.getElementById("message");
-    const postsArea = document.getElementById("posts");
-    const submitButton = document.getElementById("submit");
-    const storageKey = "sototubu-demo-posts";
+<section class="post">
+<div class="name">青い空</div>
+<div class="country">🇦🇺 オーストラリア・渡航希望</div>
+<p>来年ワーホリに行きたいです。仕事探しは大変ですか？</p>
+<div class="actions">♡ 8　💬 3</div>
+</section>
 
-    let posts = [];
+</main>
 
-    try {
-      const saved = JSON.parse(localStorage.getItem(storageKey));
-      if (Array.isArray(saved)) {
-        posts = saved.filter(item => typeof item === "string");
-      }
-    } catch (error) {
-      posts = [];
-    }
+<script>
+const profileKey="sototubu-demo-profile";
+const storageKey="sototubu-demo-posts";
+const nicknameInput=document.getElementById("nickname");
+const countryInput=document.getElementById("country");
+const statusInput=document.getElementById("status");
+const messageInput=document.getElementById("message");
+const postsArea=document.getElementById("posts");
 
-    function savePosts() {
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(posts));
-        return true;
-      } catch (error) {
-        alert("保存できませんでした。ブラウザの設定をご確認ください。");
-        return false;
-      }
-    }
+let profile={name:"",country:"",status:"在住"};
+let posts=[];
 
-    function showPosts() {
-      postsArea.replaceChildren();
+try{
+ const savedProfile=JSON.parse(localStorage.getItem(profileKey));
+ if(savedProfile&&typeof savedProfile==="object"){
+  profile={
+   name:String(savedProfile.name||"").slice(0,30),
+   country:String(savedProfile.country||""),
+   status:String(savedProfile.status||"在住")
+  };
+ }
+}catch(error){
+ profile={name:"",country:"",status:"在住"};
+}
 
-      posts.forEach((message, index) => {
-        const card = document.createElement("div");
-        card.className = "post";
+try{
+ const savedPosts=JSON.parse(localStorage.getItem(storageKey));
+ if(Array.isArray(savedPosts)){
+  posts=savedPosts.filter(p=>
+   typeof p==="string"||
+   (p&&typeof p==="object"&&typeof p.message==="string")
+  ).map(p=>typeof p==="string"?
+   {message:p,name:"あなた",country:"🌏 お試し投稿",status:""}:
+   {
+    message:p.message,
+    name:String(p.name||"あなた"),
+    country:String(p.country||"🌏 お試し投稿"),
+    status:String(p.status||"")
+   }
+  );
+ }
+}catch(error){
+ posts=[];
+}
 
-        const name = document.createElement("div");
-        name.className = "name";
-        name.textContent = "あなた";
+nicknameInput.value=profile.name;
+countryInput.value=profile.country;
+statusInput.value=profile.status;
 
-        const country = document.createElement("div");
-        country.className = "country";
-        country.textContent = "🌏 お試し投稿";
+function store(key,value){
+ try{
+  localStorage.setItem(key,JSON.stringify(value));
+  return true;
+ }catch(error){
+  alert("保存できませんでした。ブラウザの設定をご確認ください。");
+  return false;
+ }
+}
 
-        const body = document.createElement("p");
-        body.className = "message";
-        body.textContent = message;
+document.getElementById("saveProfile").addEventListener("click",()=>{
+ const name=nicknameInput.value.trim();
+ if(!name){
+  alert("ニックネームを入力してください。");
+  return;
+ }
+ if(!countryInput.value){
+  alert("国名を選択してください。");
+  return;
+ }
+ const next={
+  name,
+  country:countryInput.value,
+  status:statusInput.value
+ };
+ if(store(profileKey,next)){
+  profile=next;
+  document.getElementById("profileNotice").textContent=
+   "プロフィールを保存しました。次の投稿から反映されます。";
+ }
+});
 
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete";
-        deleteButton.type = "button";
-        deleteButton.textContent = "削除する";
+function showPosts(){
+ postsArea.replaceChildren();
+ posts.forEach((post,index)=>{
+  const card=document.createElement("article");
+  card.className="post";
 
-        deleteButton.addEventListener("click", () => {
-          if (!confirm("この投稿を削除しますか？")) return;
-          const oldPosts = [...posts];
-          posts.splice(index, 1);
-          if (!savePosts()) posts = oldPosts;
-          showPosts();
-        });
+  const name=document.createElement("div");
+  name.className="name";
+  name.textContent=post.name;
 
-        card.append(name, country, body, deleteButton);
-        postsArea.appendChild(card);
-      });
-    }
+  const country=document.createElement("div");
+  country.className="country";
+  country.textContent=post.country+
+   (post.status?"・"+post.status:"");
 
-    submitButton.addEventListener("click", () => {
-      const message = messageInput.value.trim();
+  const body=document.createElement("p");
+  body.className="message";
+  body.textContent=post.message;
 
-      if (!message) {
-        alert("文章を入力してください。");
-        return;
-      }
+  const remove=document.createElement("button");
+  remove.className="delete";
+  remove.type="button";
+  remove.textContent="削除する";
 
-      const oldPosts = [...posts];
-      posts.unshift(message);
+  remove.addEventListener("click",()=>{
+   if(!confirm("この投稿を削除しますか？"))return;
+   const old=posts.slice();
+   posts.splice(index,1);
+   if(!store(storageKey,posts))posts=old;
+   showPosts();
+  });
 
-      if (!savePosts()) {
-        posts = oldPosts;
-        return;
-      }
+  card.append(name,country,body,remove);
+  postsArea.appendChild(card);
+ });
+}
 
-      messageInput.value = "";
-      showPosts();
-    });
+document.getElementById("submit").addEventListener("click",()=>{
+ const message=messageInput.value.trim();
+ if(!message){
+  alert("文章を入力してください。");
+  return;
+ }
+ if(!profile.name||!profile.country){
+  alert("先にプロフィールを保存してください。");
+  return;
+ }
 
-    showPosts();
-  </script>
+ const old=posts.slice();
+ posts.unshift({
+  message,
+  name:profile.name,
+  country:profile.country,
+  status:profile.status
+ });
+
+ if(!store(storageKey,posts)){
+  posts=old;
+  return;
+ }
+ messageInput.value="";
+ showPosts();
+});
+
+showPosts();
+</script>
 </body>
 </html>
