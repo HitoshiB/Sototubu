@@ -24,6 +24,7 @@ let posts = [];
 let currentUser = null;
 let db = null;
 async function registerEmail(email, password) {
+  alert("会員登録の処理が始まりました");
   const { data, error } = await db.auth.signUp({
     email: email,
     password: password
