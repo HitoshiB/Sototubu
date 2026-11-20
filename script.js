@@ -1,81 +1,59 @@
 
+const SUPABASE_URL = "https://hwkqinchcycbxnkdy oqm.supabase.co".replace(" ", "");
+
+// ここにSupabaseのPublishable keyを貼り付ける
+const SUPABASE_KEY = "sb_publishable_zIczHQ6l22PwstM_9SqiXQ_rK0GLD-8";
+
 const profileKey = "sototubu-demo-profile";
-const storageKey = "sototubu-demo-posts";
 
 const nicknameInput = document.getElementById("nickname");
 const countryInput = document.getElementById("country");
 const statusInput = document.getElementById("status");
 const messageInput = document.getElementById("message");
 const postsArea = document.getElementById("posts");
+const submitButton = document.getElementById("submit");
 
 let profile = { name: "", country: "", status: "在住" };
 let posts = [];
+let currentUser = null;
+let db = null;
 
-try {
-  const savedProfile = JSON.parse(localStorage.getItem(profileKey));
-
-  if (savedProfile && typeof savedProfile === "object") {
-    profile = {
-      name: String(savedProfile.name || "").slice(0, 30),
-      country: String(savedProfile.country || ""),
-      status: String(savedProfile.status || "在住")
-    };
-  }
-} catch (error) {
-  profile = { name: "", country: "", status: "在住" };
+function notify(message) {
+  alert(message);
 }
 
 try {
-  const savedPosts = JSON.parse(localStorage.getItem(storageKey));
-
-  if (Array.isArray(savedPosts)) {
-    posts = savedPosts.filter(p =>
-      typeof p === "string" ||
-      (p && typeof p === "object" && typeof p.message === "string")
-    ).map(p =>
-      typeof p === "string"
-        ? {
-            message: p,
-            name: "あなた",
-            country: "🌏 お試し投稿",
-            status: ""
-          }
-        : {
-            message: p.message,
-            name: String(p.name || "あなた"),
-            country: String(p.country || "🌏 お試し投稿"),
-            status: String(p.status || "")
-          }
-    );
+  const saved = JSON.parse(localStorage.getItem(profileKey));
+  if (saved && typeof saved === "object") {
+    profile = {
+      name: String(saved.name || "").slice(0, 30),
+      country: String(saved.country || ""),
+      status: String(saved.status || "在住")
+    };
   }
 } catch (error) {
-  posts = [];
+  console.error("Profile loading error:", error);
 }
 
 nicknameInput.value = profile.name;
 countryInput.value = profile.country;
 statusInput.value = profile.status;
 
-function store(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch (error) {
-    alert("保存できませんでした。ブラウザの設定をご確認ください。");
-    return false;
-  }
-}
-
 document.getElementById("saveProfile").addEventListener("click", () => {
   const name = nicknameInput.value.trim();
 
   if (!name) {
-    alert("ニックネームを入力してください。");
+    notify("ニックネームを入力してください。");
+    return;
+  }
+
+  if (name.length > 30) {
+    notify("ニックネームは30文字以内にしてください。");
     return;
   }
 
   if (!countryInput.value) {
-    alert("国名を選択してください。");
+    notify("国名を選択してください。");
     return;
   }
 
@@ -85,82 +63,205 @@ document.getElementById("saveProfile").addEventListener("click", () => {
     status: statusInput.value
   };
 
-  if (store(profileKey, next)) {
+  try {
+    localStorage.setItem(profileKey, JSON.stringify(next));
     profile = next;
+
     document.getElementById("profileNotice").textContent =
       "プロフィールを保存しました。次の投稿から反映されます。";
+  } catch (error) {
+    notify("プロフィールを保存できませんでした。");
   }
 });
 
 function showPosts() {
   postsArea.replaceChildren();
 
-  posts.forEach((post, index) => {
+  if (posts.length === 0) {
+    const empty = document.createElement("p");
+    empty.textContent = "まだ投稿がありません。";
+    postsArea.appendChild(empty);
+    return;
+  }
+
+  posts.forEach((post) => {
     const card = document.createElement("article");
     card.className = "post";
 
     const name = document.createElement("div");
     name.className = "name";
-    name.textContent = post.name;
+    name.textContent = post.nickname || "名前なし";
 
     const country = document.createElement("div");
     country.className = "country";
-    country.textContent = post.country +
+    country.textContent =
+      (post.country || "") +
       (post.status ? "・" + post.status : "");
 
     const body = document.createElement("p");
     body.className = "message";
-    body.textContent = post.message;
+    body.textContent = post.content || "";
 
-    const remove = document.createElement("button");
-    remove.className = "delete";
-    remove.type = "button";
-    remove.textContent = "削除する";
+    card.append(name, country, body);
 
-    remove.addEventListener("click", () => {
-      if (!confirm("この投稿を削除しますか？")) return;
+    if (currentUser && post.user_id === currentUser.id) {
+      const remove = document.createElement("button");
+      remove.className = "delete";
+      remove.type = "button";
+      remove.textContent = "削除する";
 
-      const old = posts.slice();
-      posts.splice(index, 1);
+      remove.addEventListener("click", async () => {
+        if (!confirm("この投稿を削除しますか？")) return;
 
-      if (!store(storageKey, posts)) posts = old;
-      showPosts();
-    });
+        remove.disabled = true;
 
-    card.append(name, country, body, remove);
+        try {
+          const { data, error } = await db
+            .from("posts")
+            .delete()
+            .eq("id", post.id)
+            .eq("user_id", currentUser.id)
+            .select("id");
+
+          if (error) throw error;
+
+          if (!data || data.length === 0) {
+            throw new Error("削除できませんでした。");
+          }
+
+          await loadPosts();
+        } catch (error) {
+          console.error(error);
+          notify("削除できませんでした: " + error.message);
+          remove.disabled = false;
+        }
+      });
+
+      card.appendChild(remove);
+    }
+
     postsArea.appendChild(card);
   });
 }
 
-document.getElementById("submit").addEventListener("click", () => {
+async function loadPosts() {
+  if (!db) return;
+
+  const { data, error } = await db
+    .from("posts")
+    .select("id,user_id,nickname,country,status,content,created_at")
+    .order("created_at", { ascending: false })
+    .order("id", { ascending: false })
+    .limit(100);
+
+  if (error) {
+    console.error(error);
+    notify("投稿を読み込めませんでした: " + error.message);
+    return;
+  }
+
+  posts = data || [];
+  showPosts();
+}
+
+submitButton.addEventListener("click", async () => {
   const message = messageInput.value.trim();
 
   if (!message) {
-    alert("文章を入力してください。");
+    notify("文章を入力してください。");
+    return;
+  }
+
+  if (message.length > 2000) {
+    notify("投稿は2000文字以内にしてください。");
     return;
   }
 
   if (!profile.name || !profile.country) {
-    alert("先にプロフィールを保存してください。");
+    notify("先にプロフィールを保存してください。");
     return;
   }
 
-  const old = posts.slice();
-
-  posts.unshift({
-    message,
-    name: profile.name,
-    country: profile.country,
-    status: profile.status
-  });
-
-  if (!store(storageKey, posts)) {
-    posts = old;
+  if (!db || !currentUser) {
+    notify("接続の準備ができていません。");
     return;
   }
 
-  messageInput.value = "";
-  showPosts();
+  submitButton.disabled = true;
+
+  try {
+    const { error } = await db.from("posts").insert({
+      user_id: currentUser.id,
+      nickname: profile.name,
+      country: profile.country,
+      status: profile.status,
+      content: message
+    });
+
+    if (error) throw error;
+
+    messageInput.value = "";
+    await loadPosts();
+  } catch (error) {
+    console.error(error);
+    notify("投稿できませんでした: " + error.message);
+  } finally {
+    submitButton.disabled = false;
+  }
 });
 
-showPosts();
+async function initialize() {
+  submitButton.disabled = true;
+  postsArea.textContent = "投稿を読み込んでいます...";
+
+  if (
+    SUPABASE_KEY === "ここにPublishable keyを貼り付け"
+  ) {
+    postsArea.textContent =
+      "SupabaseのPublishable keyを設定してください。";
+    return;
+  }
+
+  if (!window.supabase || !window.supabase.createClient) {
+    postsArea.textContent =
+      "Supabaseライブラリが読み込まれていません。";
+    return;
+  }
+
+  try {
+    db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const { data: sessionData, error: sessionError } =
+      await db.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (sessionData.session) {
+      currentUser = sessionData.session.user;
+    } else {
+      const { data, error } =
+        await db.auth.signInAnonymously();
+
+      if (error) throw error;
+
+      currentUser = data.user;
+    }
+
+    if (!currentUser) {
+      throw new Error("ユーザーIDを取得できませんでした。");
+    }
+
+    submitButton.disabled = false;
+    await loadPosts();
+  } catch (error) {
+    console.error(error);
+    postsArea.textContent =
+      "接続に失敗しました: " + error.message;
+    notify("Supabaseへの接続に失敗しました。");
+  }
+}
+
+initialize();
