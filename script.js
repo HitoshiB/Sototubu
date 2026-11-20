@@ -37,8 +37,9 @@ async function registerEmail(email, password) {
 
   alert("確認メールを送信しました。メールを確認してください。");
 }
-signupButton.addEventListener("click", async () => {
+signUpButton.addEventListener("click", async () => {
   alert("新規会員登録ボタンが押されました");
+
   const email = authEmailInput.value.trim();
   const password = authPasswordInput.value;
 
@@ -46,18 +47,6 @@ signupButton.addEventListener("click", async () => {
     alert("メールアドレスとパスワードを入力してください。");
     return;
   }
-
- signUpButton.addEventListener("click", async () => {
-  const email = authEmailInput.value.trim();
-  const password = authPasswordInput.value;
-
-  if (!email || !password) {
-    alert("メールアドレスとパスワードを入力してください。");
-    return;
-  }
-
-  await registerEmail(email, password);
-});
 
   await registerEmail(email, password);
 });
