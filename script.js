@@ -1,4 +1,4 @@
-
+alert("JavaScriptは動いています");
 const SUPABASE_URL = "https://hwkqinchcycbxnkdy oqm.supabase.co".replace(" ", "");
 
 // ここにSupabaseのPublishable keyを貼り付ける
