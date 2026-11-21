@@ -354,6 +354,7 @@ if (currentUser) {
 }
 
     updateAuthButtons();
+    updateProfileDisplay();
     await loadPosts();
   } catch (error) {
     console.error(error);
