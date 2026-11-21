@@ -19,11 +19,28 @@ const signUpButton = document.getElementById("signUpButton");
 const loginButton = document.getElementById("loginButton");
 const logoutButton = document.getElementById("logoutButton");
 function updateAuthButtons() {
-  const loggedIn = !!currentUser && !currentUser.is_anonymous;
+  const loggedIn = !!currentUser;
 
   signUpButton.hidden = loggedIn;
   loginButton.hidden = loggedIn;
   logoutButton.hidden = !loggedIn;
+
+  const loginFields =
+    document.getElementById("loginFields");
+
+  const welcomeMessage =
+    document.getElementById("welcomeMessage");
+
+  loginFields.hidden = loggedIn;
+  welcomeMessage.hidden = !loggedIn;
+
+  if (loggedIn) {
+    const name = profile.name || "ゲスト";
+    welcomeMessage.textContent =
+      `${name}さん、ようこそ！`;
+  } else {
+    welcomeMessage.textContent = "";
+  }
 }
 let profile = { name: "", country: "", status: "在住" };
 let posts = [];
