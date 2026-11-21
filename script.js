@@ -364,6 +364,7 @@ loginButton.addEventListener("click", async () => {
   alert("ログインに成功しました！");
 });
 logoutButton.addEventListener("click", async () => {
+  alert("ログアウトボタンが押されました");
   if (!db) {
     alert("Supabaseに接続できていません。");
     return;
