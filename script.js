@@ -363,4 +363,20 @@ loginButton.addEventListener("click", async () => {
   currentUser = data.user;
   alert("ログインに成功しました！");
 });
+logoutButton.addEventListener("click", async () => {
+  if (!db) {
+    alert("Supabaseに接続できていません。");
+    return;
+  }
+
+  const { error } = await db.auth.signOut();
+
+  if (error) {
+    alert("ログアウトに失敗しました: " + error.message);
+    return;
+  }
+
+  alert("ログアウトしました。");
+  location.reload();
+});
 initialize();
