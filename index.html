@@ -45,7 +45,13 @@
 </section>
 
   <section class="post" id="profileSection">
-  <h2>プロフィール設定</h2>
+  <h2>マイプロフィール</h2>
+
+<div id="profileDisplay" hidden>
+  <p>ニックネーム：<span id="displayName"></span></p>
+  <p>国名：<span id="displayCountry"></span></p>
+  <p>現在の状況：<span id="displayStatus"></span></p>
+</div>
     <div id="profileFields">
     <label for="nickname">ニックネーム</label>
     <input id="nickname" maxlength="30"
