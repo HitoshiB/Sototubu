@@ -5,7 +5,14 @@ const SUPABASE_URL = "https://hwkqinchcycbxnkdy oqm.supabase.co".replace(" ", ""
 const SUPABASE_KEY = "sb_publishable_zIczHQ6l22PwstM_9SqiXQ_rK0GLD-8";
 
 const profileKey = "sototubu-demo-profile";
+const profileFields = document.getElementById("profileFields");
+const editProfileButton = document.getElementById("editProfileButton");
+function updateProfileDisplay() {
+  const completed = !!currentUser && !!profile.name;
 
+  profileFields.hidden = completed;
+  editProfileButton.hidden = !completed;
+}
 const nicknameInput = document.getElementById("nickname");
 const countryInput = document.getElementById("country");
 const statusInput = document.getElementById("status");
