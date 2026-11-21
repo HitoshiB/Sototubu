@@ -80,3 +80,6 @@ button {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+[hidden] {
+  display: none !important;
+}
