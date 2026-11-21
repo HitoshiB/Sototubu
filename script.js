@@ -308,6 +308,26 @@ async function initialize() {
     }
 
     submitButton.disabled = false;
+    const { data: profileData, error: profileError } = await db
+  .from("profiles")
+  .select("name,country,status")
+  .eq("user_id", currentUser.id)
+  .maybeSingle();
+
+if (profileError) throw profileError;
+
+if (profileData) {
+  profile = {
+    name: profileData.name || "",
+    country: profileData.country || "",
+    status: profileData.status || "在住"
+  };
+
+  nicknameInput.value = profile.name;
+  countryInput.value = profile.country;
+  statusInput.value = profile.status;
+}
+    
     await loadPosts();
   } catch (error) {
     console.error(error);
