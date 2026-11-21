@@ -42,7 +42,8 @@ const loginButton = document.getElementById("loginButton");
 const logoutButton = document.getElementById("logoutButton");
 function updateAuthButtons() {
   const loggedIn = !!currentUser;
-
+  const authTitle = document.getElementById("authTitle");
+  authTitle.hidden = loggedIn;
   signUpButton.hidden = loggedIn;
   loginButton.hidden = loggedIn;
   logoutButton.hidden = !loggedIn;
