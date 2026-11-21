@@ -144,10 +144,12 @@ document.getElementById("saveProfile").addEventListener("click", async () => {
     if (error) throw error;
 
     localStorage.setItem(profileKey, JSON.stringify(next));
-    profile = next;
+profile = next;
 
-    document.getElementById("profileNotice").textContent =
-      "プロフィールを保存しました。";
+updateProfileDisplay();
+
+document.getElementById("profileNotice").textContent =
+  "プロフィールを保存しました。";
 
     notify("プロフィールを保存しました。");
   } catch (error) {
@@ -155,7 +157,10 @@ document.getElementById("saveProfile").addEventListener("click", async () => {
     notify("保存に失敗しました: " + error.message);
   }
 });
-
+editProfileButton.addEventListener("click", () => {
+  profileFields.hidden = false;
+  editProfileButton.hidden = true;
+});
 
 function showPosts() {
   postsArea.replaceChildren();
