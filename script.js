@@ -316,40 +316,36 @@ async function initialize() {
     if (sessionError) throw sessionError;
 
     if (sessionData.session) {
-      currentUser = sessionData.session.user;
-    } else {
-      const { data, error } =
-        await db.auth.signInAnonymously();
-
-      if (error) throw error;
-
-      currentUser = data.user;
-    }
-
-    if (!currentUser) {
-      throw new Error("ユーザーIDを取得できませんでした。");
-    }
+  currentUser = sessionData.session.user;
+} else {
+  currentUser = null;
+}
+    
     updateAuthButtons();
     submitButton.disabled = false;
-    const { data: profileData, error: profileError } = await db
-  .from("profiles")
-  .select("name,country,status")
-  .eq("user_id", currentUser.id)
-  .maybeSingle();
+    
+if (currentUser) {
+  const { data: profileData, error: profileError } = await db
+    .from("profiles")
+    .select("name,country,status")
+    .eq("user_id", currentUser.id)
+    .maybeSingle();
 
-if (profileError) throw profileError;
+  if (profileError) throw profileError;
 
-if (profileData) {
-  profile = {
-    name: profileData.name || "",
-    country: profileData.country || "",
-    status: profileData.status || "在住"
-  };
+  if (profileData) {
+    profile = {
+      name: profileData.name || "",
+      country: profileData.country || "",
+      status: profileData.status || "在住"
+    };
 
-  nicknameInput.value = profile.name;
-  countryInput.value = profile.country;
-  statusInput.value = profile.status;
+    nicknameInput.value = profile.name;
+    countryInput.value = profile.country;
+    statusInput.value = profile.status;
+  }
 }
+
     updateAuthButtons();
     await loadPosts();
   } catch (error) {
