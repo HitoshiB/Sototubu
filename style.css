@@ -83,3 +83,11 @@ button {
 [hidden] {
   display: none !important;
 }
+#logoutButton:not([hidden]) {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 1000;
+  padding: 6px 10px;
+  font-size: 12px;
+}
