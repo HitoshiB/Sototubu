@@ -93,9 +93,11 @@ button {
 }
 /* ログイン中は不要な白い枠を隠す */
 #authSection:has(#logoutButton:not([hidden])) {
-  display: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
-
 /* 歓迎メッセージのデザイン */
 #welcomeMessage:not([hidden]) {
   text-align: right;
@@ -103,10 +105,4 @@ button {
   margin: 10px 0 16px;
   padding: 0;
 }
-#logoutButton {
-  display: inline-block;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  z-index: 100;
-}
+
