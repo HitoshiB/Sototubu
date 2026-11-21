@@ -350,7 +350,7 @@ if (profileData) {
   countryInput.value = profile.country;
   statusInput.value = profile.status;
 }
-    
+    updateAuthButtons();
     await loadPosts();
   } catch (error) {
     console.error(error);
