@@ -18,7 +18,13 @@ const authPasswordInput = document.getElementById("authPassword");
 const signUpButton = document.getElementById("signUpButton");
 const loginButton = document.getElementById("loginButton");
 const logoutButton = document.getElementById("logoutButton");
+function updateAuthButtons() {
+  const loggedIn = !!currentUser;
 
+  signUpButton.hidden = loggedIn;
+  loginButton.hidden = loggedIn;
+  logoutButton.hidden = !loggedIn;
+}
 let profile = { name: "", country: "", status: "在住" };
 let posts = [];
 let currentUser = null;
