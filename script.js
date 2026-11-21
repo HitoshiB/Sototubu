@@ -71,8 +71,8 @@ nicknameInput.value = profile.name;
 countryInput.value = profile.country;
 statusInput.value = profile.status;
 
-document.getElementById("saveProfile").addEventListener("click", () => {
-  alert("プロフィール保存ボタンが押されました");
+
+document.getElementById("saveProfile").addEventListener("click", async () => {
   const name = nicknameInput.value.trim();
 
   if (!name) {
@@ -90,6 +90,11 @@ document.getElementById("saveProfile").addEventListener("click", () => {
     return;
   }
 
+  if (!db || !currentUser) {
+    notify("接続の準備ができていません。");
+    return;
+  }
+
   const next = {
     name,
     country: countryInput.value,
@@ -97,15 +102,30 @@ document.getElementById("saveProfile").addEventListener("click", () => {
   };
 
   try {
+    const { error } = await db
+      .from("profiles")
+      .upsert({
+        user_id: currentUser.id,
+        name: next.name,
+        country: next.country,
+        status: next.status
+      }, { onConflict: "user_id" });
+
+    if (error) throw error;
+
     localStorage.setItem(profileKey, JSON.stringify(next));
     profile = next;
 
     document.getElementById("profileNotice").textContent =
-      "プロフィールを保存しました。次の投稿から反映されます。";
+      "プロフィールを保存しました。";
+
+    notify("プロフィールを保存しました。");
   } catch (error) {
-    notify("プロフィールを保存できませんでした。");
+    console.error(error);
+    notify("保存に失敗しました: " + error.message);
   }
 });
+
 
 function showPosts() {
   postsArea.replaceChildren();
