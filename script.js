@@ -361,7 +361,8 @@ loginButton.addEventListener("click", async () => {
   }
 
   currentUser = data.user;
-  alert("ログインに成功しました！");
+alert("ログインに成功しました！");
+location.reload();
 });
 logoutButton.addEventListener("click", async () => {
   
