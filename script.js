@@ -10,8 +10,23 @@ const editProfileButton = document.getElementById("editProfileButton");
 function updateProfileDisplay() {
   const completed = !!currentUser && !!profile.name;
 
+  const profileDisplay =
+    document.getElementById("profileDisplay");
+
   profileFields.hidden = completed;
   editProfileButton.hidden = !completed;
+  profileDisplay.hidden = !completed;
+
+  if (completed) {
+    document.getElementById("displayName").textContent =
+      profile.name;
+
+    document.getElementById("displayCountry").textContent =
+      profile.country;
+
+    document.getElementById("displayStatus").textContent =
+      profile.status;
+  }
 }
 const nicknameInput = document.getElementById("nickname");
 const countryInput = document.getElementById("country");
