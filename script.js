@@ -72,6 +72,7 @@ countryInput.value = profile.country;
 statusInput.value = profile.status;
 
 document.getElementById("saveProfile").addEventListener("click", () => {
+  alert("プロフィール保存ボタンが押されました");
   const name = nicknameInput.value.trim();
 
   if (!name) {
