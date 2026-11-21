@@ -364,7 +364,7 @@ loginButton.addEventListener("click", async () => {
   alert("ログインに成功しました！");
 });
 logoutButton.addEventListener("click", async () => {
-  alert("ログアウトボタンが押されました");
+  
   if (!db) {
     alert("Supabaseに接続できていません。");
     return;
@@ -377,7 +377,8 @@ logoutButton.addEventListener("click", async () => {
     return;
   }
 
-  alert("ログアウトしました。");
-  location.reload();
+localStorage.removeItem(profileKey);
+alert("ログアウトしました。");
+location.reload();
 });
 initialize();
