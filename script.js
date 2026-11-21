@@ -312,7 +312,7 @@ async function initialize() {
     if (!currentUser) {
       throw new Error("ユーザーIDを取得できませんでした。");
     }
-
+    updateAuthButtons();
     submitButton.disabled = false;
     const { data: profileData, error: profileError } = await db
   .from("profiles")
