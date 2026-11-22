@@ -105,4 +105,41 @@ button {
   margin: 10px 0 16px;
   padding: 0;
 }
+/* プロフィールと投稿欄を左右に並べる */
+.mainLayout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  max-width: 1000px;
+  margin: 20px auto;
+}
 
+/* 左側のプロフィール */
+.mainLayout #profileSection {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 16px;
+}
+
+/* プロフィールの文字を小さくする */
+.mainLayout #profileSection h2 {
+  font-size: 18px;
+}
+
+/* 右側の投稿欄 */
+.mainLayout > section.post:not(#profileSection) {
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+}
+
+/* スマートフォンでは縦並びに戻す */
+@media (max-width: 650px) {
+  .mainLayout {
+    grid-template-columns: 1fr;
+    padding: 0 12px;
+  }
+}
