@@ -451,3 +451,13 @@ function openRoom(post) {
 
   window.scrollTo(0, 0);
 }
+/* 投稿一覧に戻る */
+document.getElementById("backToPosts").addEventListener("click", () => {
+  document.getElementById("roomSection").hidden = true;
+
+  document.querySelector(".mainLayout").hidden = false;
+
+  postsArea.hidden = false;
+
+  window.scrollTo(0, 0);
+});
