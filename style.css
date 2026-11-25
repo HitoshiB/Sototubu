@@ -143,3 +143,51 @@ button {
     padding: 0 12px;
   }
 }
+/* 会話ルーム */
+#roomSection {
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+/* 元の投稿 */
+#roomOriginalPost {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+/* 会話メッセージ一覧 */
+#roomMessages {
+  height: 50vh;
+  overflow-y: auto;
+  background: #eef3f8;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+/* メッセージ入力欄 */
+#roomInputArea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+#roomMessageInput {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+#sendRoomMessage {
+  flex-shrink: 0;
+}
+
+/* 投稿をタップできるようにする */
+#posts .post {
+  cursor: pointer;
+}
