@@ -436,3 +436,18 @@ alert("ログアウトしました。");
 location.reload();
 });
 initialize();
+function openRoom(post) {
+  const roomSection = document.getElementById("roomSection");
+
+  document.querySelector(".mainLayout").hidden = true;
+  postsArea.hidden = true;
+
+  document.getElementById("roomOriginalPost").textContent =
+    post.nickname + "：" + post.content;
+
+  document.getElementById("roomMessages").replaceChildren();
+
+  roomSection.hidden = false;
+
+  window.scrollTo(0, 0);
+}
