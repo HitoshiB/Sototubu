@@ -121,6 +121,31 @@
   </section>
 
 </main>
+ <section id="roomSection" hidden>
+
+  <button id="backToPosts" type="button">
+    ← 投稿一覧に戻る
+  </button>
+
+  <h2>会話ルーム</h2>
+
+  <div id="roomOriginalPost"></div>
+
+  <div id="roomMessages"></div>
+
+  <div id="roomInputArea">
+    <textarea id="roomMessageInput"
+      rows="2"
+      maxlength="280"
+      placeholder="メッセージを入力">
+    </textarea>
+
+    <button id="sendRoomMessage" type="button" disabled>
+      送信
+    </button>
+  </div>
+
+</section>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 </body>
