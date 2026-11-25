@@ -191,7 +191,12 @@ function showPosts() {
   posts.forEach((post) => {
     const card = document.createElement("article");
     card.className = "post";
+    card.style.cursor = "pointer";
 
+card.addEventListener("click", (event) => {
+  if (event.target.closest("button")) return;
+  alert("会話ルームを開きます");
+});
     const name = document.createElement("div");
     name.className = "name";
     name.textContent = post.nickname || "名前なし";
