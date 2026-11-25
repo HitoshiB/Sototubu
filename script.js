@@ -195,7 +195,7 @@ function showPosts() {
 
 card.addEventListener("click", (event) => {
   if (event.target.closest("button")) return;
-  alert("会話ルームを開きます");
+  openRoom(post);
 });
     const name = document.createElement("div");
     name.className = "name";
