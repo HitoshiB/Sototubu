@@ -436,7 +436,9 @@ alert("ログアウトしました。");
 location.reload();
 });
 initialize();
+let currentRoomId = null;
 function openRoom(post) {
+  currentRoomId = post.id;
   const roomSection = document.getElementById("roomSection");
 
   document.querySelector(".mainLayout").hidden = true;
@@ -453,6 +455,7 @@ function openRoom(post) {
 }
 /* 投稿一覧に戻る */
 document.getElementById("backToPosts").addEventListener("click", () => {
+  currentRoomId = null;
   document.getElementById("roomSection").hidden = true;
 
   document.querySelector(".mainLayout").hidden = false;
