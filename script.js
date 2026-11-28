@@ -502,3 +502,55 @@ async function loadRoomMessages() {
 
   area.scrollTop = area.scrollHeight;
 }
+/* 会話ルームのメッセージ送信 */
+const roomInput = document.getElementById("roomMessageInput");
+const roomSend = document.getElementById("sendRoomMessage");
+
+let roomSending = false;
+
+roomInput.addEventListener("input", () => {
+  roomSend.disabled = roomSending || !roomInput.value.trim();
+});
+
+roomSend.addEventListener("click", async () => {
+  if (roomSending || currentRoomId === null) return;
+
+  if (!currentUser) {
+    alert("ログインしてください。");
+    return;
+  }
+
+  const content = roomInput.value.trim();
+  if (!content) return;
+
+  const roomId = currentRoomId;
+
+  roomSending = true;
+  roomSend.disabled = true;
+
+  try {
+    const { error } = await db
+      .from("messages")
+      .insert({
+        post_id: roomId,
+        user_id: currentUser.id,
+        content: content
+      });
+
+    if (error) throw error;
+
+    if (currentRoomId === roomId) {
+      if (roomInput.value.trim() === content) {
+        roomInput.value = "";
+      }
+      await loadRoomMessages();
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert("送信できませんでした：" + error.message);
+  } finally {
+    roomSending = false;
+    roomSend.disabled = !roomInput.value.trim();
+  }
+});
