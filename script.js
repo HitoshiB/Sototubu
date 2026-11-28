@@ -452,6 +452,7 @@ function openRoom(post) {
   roomSection.hidden = false;
 
   window.scrollTo(0, 0);
+  loadRoomMessages();
 }
 /* 投稿一覧に戻る */
 document.getElementById("backToPosts").addEventListener("click", () => {
@@ -464,3 +465,40 @@ document.getElementById("backToPosts").addEventListener("click", () => {
 
   window.scrollTo(0, 0);
 });
+/* 会話ルームのメッセージを読み込む */
+async function loadRoomMessages() {
+  if (currentRoomId === null) return;
+
+  const roomId = currentRoomId;
+
+  const { data, error } = await db
+    .from("messages")
+    .select("id,user_id,content,created_at")
+    .eq("post_id", roomId)
+    .order("created_at", { ascending: true })
+    .order("id", { ascending: true });
+
+  if (currentRoomId !== roomId) return;
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const area = document.getElementById("roomMessages");
+  area.replaceChildren();
+
+  for (const message of data || []) {
+    const bubble = document.createElement("div");
+    bubble.className = "chatMessage";
+    bubble.textContent = message.content;
+
+    if (currentUser && message.user_id === currentUser.id) {
+      bubble.classList.add("myMessage");
+    }
+
+    area.appendChild(bubble);
+  }
+
+  area.scrollTop = area.scrollHeight;
+}
